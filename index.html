@@ -26,8 +26,10 @@
         </section>
         <section class="calculator">
             <h3>calculator</h3>
-            <input placeholder="Crypto" type="text" id="crypto">
-            <input placeholder="Dollar" type="text" id="dollar">
+            <label id="cryptoLabel">Crypto: </label>
+            <input placeholder="Crypto" disabled type="number" pattern="[0-9]" id="crypto">
+            <label>Dollar</label>
+            <input placeholder="Dollar" disabled type="number" pattern="[0-9]" id="dollar">
         </section>
         <nav class="draweContainer" id="drawer">
             <button class="buttonCloseDrawer" id="buttonCloseDrawer" onclick="closeSetting()">&#10006;</button>

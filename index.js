@@ -5,11 +5,13 @@ const greenMode = document.getElementById('greenMode');
 const mainContent = document.getElementById('mainContainer');
 const drawer = document.getElementById('drawer');
 const cryptoToSearchInput = document.getElementById('searchInput');
+const cryptofound = document.getElementById('crypto');
+const dollar = document.getElementById('dollar');
+var initialValueCrypto = 0
 var cryptoToSearch = ""
 
 function changeTheme(theme) {
     mainContent.dataset.theme = theme;
-
 }
 
 function changeThemeSelectedStyles(theme1, theme2, theme3, theme4) {
@@ -17,7 +19,6 @@ function changeThemeSelectedStyles(theme1, theme2, theme3, theme4) {
     theme2.classList.remove('active');
     theme3.classList.remove('active');
     theme4.classList.remove('active');
-
 }
 
 lightMode.onclick = function () {
@@ -44,25 +45,71 @@ cryptoToSearchInput.addEventListener('keyup', function (e) {
     cryptoToSearch = e.target.value;
 });
 
+const crypto = [{
+        "id": 1,
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "price": 50000
+    },
+    {
+        "id": 2,
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "price": 3000
+    },
+    {
+        "id": 3,
+        "name": "Cardano",
+        "symbol": "ADA",
+        "price": 2.5
+    },
+    {
+        "id": 4,
+        "name": "Ripple",
+        "symbol": "XRP",
+        "price": 1.5
+    },
+    {
+        "id": 5,
+        "name": "Litecoin",
+        "symbol": "LTC",
+        "price": 200
+    }
+]
+
+cryptofound.onkeyup = function (e) {
+    dollar.value = initialValueCrypto * e.target.value;
+}
+
+dollar.onkeyup = function (e) {
+    cryptofound.value = e.target.value / initialValueCrypto ;
+
+}
+
 async function searchCrypto() {
-    console.log('first')
-    const apiKey = "fc2a0fa3-3db3-4cc5-83e7-d1424d93d4fd"
-    const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000&convert=USD`
-    await fetch(url, {
-        method: 'GET',
-        headers: {
-            'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-    }).catch(error => {
-        console.log(error)
-    })  
+    if (cryptoToSearch === "") {
+        return;
+    } else {
+        const searchResult = crypto.filter((crypto) => {
+            return crypto.name.toLowerCase().includes(cryptoToSearch.toLowerCase());
+        });
+
+        if (searchResult.length === 0) {
+            alert('No result found');
+        } else {
+            cryptofound.removeAttribute('disabled');
+            dollar.removeAttribute('disabled');
+
+            initialValueCrypto = searchResult[0].price;
+
+            cryptofound.value = 1;
+            dollar.value =  searchResult[0].price / 1;
+
+            let cryptoLabel = document.getElementById('cryptoLabel');
+            cryptoLabel.innerHTML =  searchResult[0].name + " (" + searchResult[0].symbol + ")";
+        }
+    
+    }
 }
 
 function openSetting() {
@@ -83,5 +130,3 @@ function closeSetting() {
     drawer.classList.remove('is-drawer-open');
 
 }
-
-
